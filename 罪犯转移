@@ -1,0 +1,68 @@
+[编程题]罪犯转移
+
+// ConsoleApplication67.cpp : Defines the entry point for the console application.
+//
+
+
+#include <iostream>
+#include <vector>
+#include <string>
+#include <sstream>
+using namespace std;
+
+int sum(vector<int> &ivec, int start, int end) {
+	int result = 0;
+	for (int i = start; i <= end; ++i) {
+		result += ivec[i];
+	}
+	return result;
+}
+
+int main()
+{
+	int total, maximum, dispatched;
+	total = maximum = dispatched = 0;
+	int output = 0;
+	int line = 1;
+	vector<int> ivec1;
+	vector<int> ivec2;
+	string str;
+	while (getline(cin, str)) {
+		if (line == 1) {
+			istringstream sstr(str);
+			int n;
+			while (sstr >> n) {
+				ivec1.push_back(n);
+			}
+			total = ivec1[0];
+			maximum = ivec1[1];
+			dispatched = ivec1[2];
+			if (total < dispatched || ivec1.size() != 3) {
+				return -1;                //important!!!
+			}
+			++line;
+		}
+		else if (line == 2) {
+			istringstream sstr(str);
+			int n;
+			while (sstr >> n) {
+				ivec2.push_back(n);
+			}
+			if (ivec2.size() != total) {
+				return -1;                    //important!!!
+			}
+			for (int i = 0; i <= (total - dispatched); ++i) {
+				if (sum(ivec2, i, i + dispatched - 1) <= maximum) {
+					output++;
+				}
+			}
+			cout << output << endl;   // must add the endl, or you will not pass the test, a little strange, maybe the reason of formatting.
+			output = 0;
+			--line;
+			ivec1.clear();             // remember to clear the vector!!
+			ivec2.clear();
+		}
+	}
+    return 0;
+}
+
